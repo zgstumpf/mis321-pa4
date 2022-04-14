@@ -1,19 +1,19 @@
-let main_url = `https://localhost:7039/api/songs/`;
-
-
-
+const port = '7039';
+let main_url = `https://localhost:${port}/api/songs/`;
 
 
 
 
 function getSongs(){
     fetch(main_url).then(function(response){
-        console.log(main_url);
         console.log(response);
         return response.json();
     }).then(function(json) {
         console.log(json);
-        let html = ``;
+
+        let html = `<div class="row">`;
+        let cardPlacementNumber = 0;
+
         json.forEach((song) => {
             html += `<div class="card col-md-4 bg-dark text-white">`
             html += `<img src="./resources/images/music.jpeg" class="card-img" alt="...">`
@@ -24,12 +24,23 @@ function getSongs(){
             html += `<h5 class="card-title">`+cardTitle+`</h5>`
             html += `</div>`
             html += `</div>`
-        });
-        if(html === ``){
-            html = "No Songs found :("
+            cardPlacementNumber++;
+            
+            // After the third song in the row, a new row starts.
+            if(cardPlacementNumber % 3 == 0)
+            {
+                html += `</div>`
+                html += `<div class="row">`
+            }
+        });        
+        
+        // If there are no songs
+        if(cardPlacementNumber == 0)
+        {
+            html == `<p>No songs found. Add some songs and/or make sure you are connected to the api server.</p>`
         }
-        document.getElementById("cards").innerHTML = html;
 
+        document.getElementById("cards").innerHTML = html;
     }).catch(function(error) {
         console.log(error);
     })
@@ -37,12 +48,16 @@ function getSongs(){
         
 function postSong(){
     const songTitle = document.getElementById("title").value;
+    
+    // Clear input field
+    document.getElementById("title").value = '';
+
     console.log(songTitle);
     fetch(main_url, {
-            method: "POST",
+            method: 'POST',
             headers: {
-                Accept: 'application/json',
-                "Content-Type": 'application/json'
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify( {
                 songTitle: songTitle,
@@ -60,14 +75,18 @@ function postSong(){
 function deleteSong(){
     const deleteID = document.getElementById("IDToDelete").value;
     console.log(deleteID);
+
+    // Clear input field
+    document.getElementById("IDToDelete").value = '';
+    
     let specific_url = main_url;
     specific_url += deleteID;
     console.log(specific_url);
     fetch(specific_url, {
-            method: "DELETE",
+            method: 'DELETE',
             headers: {
-                Accept: 'application/json',
-                "Content-Type": 'application/json'
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             }
     }).then((response) => {
         console.log(response);
@@ -79,6 +98,10 @@ function deleteSong(){
 function favoriteSong()
 {
     const songID = document.getElementById("IDToFavorite").value;
+
+    // Clear input field
+    document.getElementById("IDToFavorite").value = ''
+
     let specific_url = main_url;
     specific_url += songID;
 
@@ -91,6 +114,17 @@ function favoriteSong()
         let title = json.songTitle;
         let timestamp = json.songTimeStamp;
         let deleted = json.deleted;
+
+        // Switches favorited status. Lets you unfavorite a favorited song.
+        let favorited = json.favorited;
+        if(favorited == "false")
+        {
+            favorited = "true";
+        }
+        else{
+            favorited = "false";
+        }
+
         return fetch(specific_url, {
             method: 'PUT',
             headers: {
@@ -103,7 +137,7 @@ function favoriteSong()
                 songTitle: title,
                 songTimestamp: timestamp,
                 deleted: deleted,
-                favorited: 'true'
+                favorited: favorited
             })
         });
     })

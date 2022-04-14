@@ -7,15 +7,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="./resources/css/index.css" rel="stylesheet">
     <title>Big Al's BDS Playlist</title>
+    <link type="image/png" sizes="96x96" rel="icon" href="./resources/images/favicon.png">
 </head>
 
-<body onload="getSongs()">
+<body onload="getSongs()" id="background">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">Big Al's BDS Playlist</a>
-          <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
-          </button> -->
+          </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
@@ -30,99 +31,76 @@
               <li class="nav-item">
                 <a class="nav-link" href="#delete">Delete a Song</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#favorite">Favorite a Song</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#search">Search Songs</a>
+              </li>
             </ul>
           </div>
         </div>
-      </nav>
+    </nav>
 
-      <div class="jumbotron jumbotron-fluid">
-        <div class="container">
-          <h1 class="display-4">Big Al's Bryant Denny Stadium Playlist</h1>
-          <p class="lead">This is a website for all of Big Al's hype music in BDS for gameday.</p>
-          <img id="bigAlStadium" src="./resources/images/bigAl.jpeg">
-        </div>
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <h1 class="display-4">Big Al's Bryant Denny Stadium Playlist</h1>
+        <p class="lead">This is a website for all of Big Al's hype music in BDS for gameday.</p>
+        <img id="bigAlStadium" src="./resources/images/bigAl.jpeg">
       </div>
-
-      <div id="cards" class="container">
-        <div class="row">
-            <div class="card col-md-4 bg-dark text-white">
-                <img src="./resources/images/music.jpeg" class="card-img" alt="...">
-                <div class="card-img-overlay">
-                    <h5 class="card-title">Sweet Home Alabama</h5>
-                </div>
-            </div>
-            <div class="card col-md-4 bg-dark text-white">
-                <img src="./resources/images/music.jpeg" class="card-img" alt="...">
-                <div class="card-img-overlay">
-                    <h5 class="card-title">Yea Alabama!</h5>
-                </div>
-            </div>
-            <div class="card col-md-4 bg-dark text-white">
-                <img src="./resources/images/music.jpeg" class="card-img" alt="...">
-                <div class="card-img-overlay">
-                    <h5 class="card-title">Thunderstruck</h5>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="card col-md-4 bg-dark text-white">
-                <img src="./resources/images/music.jpeg" class="card-img" alt="...">
-                <div class="card-img-overlay">
-                    <h5 class="card-title">Friends in Low Places</h5>
-                </div>
-            </div>
-            <div class="card col-md-4 bg-dark text-white">
-                <img src="./resources/images/music.jpeg" class="card-img" alt="...">
-                <div class="card-img-overlay">
-                    <h5 class="card-title">Mr. Brightside</h5>
-                </div>
-            </div>
-            <div class="card col-md-4 bg-dark text-white">
-                <img src="./resources/images/music.jpeg" class="card-img" alt="...">
-                <div class="card-img-overlay">
-                    <h5 class="card-title">Dixieland Delight</h5>
-                </div>
-            </div>
-        </div>
     </div>
+
+    <div id="cards" class="container"> 
+    </div>
+
+    <br>
 
     <div id="add" class="container">
         <form onsubmit="return false;" method="post">
-            <label class="form-label" for="title">Enter a new song here:</label><br>
-            <input class="form-control" type="text" id="title" name="title"><br>
-            <input type="submit" value="Add" onclick="postSong()">
-          </form>
+            <div class="inputContainer">
+              <label class="form-label" for="title">Enter a new song here:</label><br>
+              <input class="form-control" type="text" id="title" name="title" placeholder="Title"><br>
+              <button class="btn btn-dark" onclick="postSong()">Add</button>
+            </div>
+        </form>
     </div>
+    
+    <br>
 
     <div id="delete" class="container">
       <form onsubmit="return false;" method="delete">
-          <label class="form-label" for="title">Enter a song ID to delete:</label><br>
-          <input class="form-control" type="text" id="IDToDelete" name="ID"><br>
-          <input type="submit" value="Delete" onclick="deleteSong()">
-        </form>
+        <div class="inputContainer">
+            <label class="form-label" for="title">Enter a song ID to delete:</label><br>
+            <input class="form-control" type="text" id="IDToDelete" name="ID" placeholder="ID"><br>
+            <button class="btn btn-dark" onclick="deleteSong()">Delete</button>
+        </div>
+      </form>
     </div>
+    
+    <br>
 
     <div id="favorite" class="container">
       <form onsubmit="return false;" method="put">
-          <label class="form-label" for="title">Enter a song ID to favorite:</label><br>
-          <input class="form-control" type="text" id="IDToFavorite" name="ID"><br>
-          <input type="submit" value="Favorite" onclick="favoriteSong()">
-        </form>
+        <div class="inputContainer">
+          <label class="form-label" for="title">Enter a song ID to favorite/unfavorite:</label><br>
+          <input class="form-control" type="text" id="IDToFavorite" name="ID" placeholder="ID"><br>
+          <button class="btn btn-dark" onclick="favoriteSong()">Set</button>
+        </div>
+      </form>
     </div>
+    
+    <br>
 
     <div id="search" class="container">
         <form onsubmit="return false;">
+          <div class="inputContainer">
             <label class="form-label" for="searchSong">Find a song here:</label><br>
-            <input class="form-control" type="text" id="searchSong" name="searchSong" ><br>
+            <input class="form-control" type="text" id="searchSong" name="searchSong" placeholder="Title"><br>
             <button class="btn btn-dark" onclick="findSongs()">Find Song</button>
-          </form>
+          </div>
+        </form>
     </div>
 
-    <div class="container">
-        <div id="searchSongs" class="row">
-
-        </div>
-    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script src="./resources/scripts/index.js" type="text/JavaScript"></script>
