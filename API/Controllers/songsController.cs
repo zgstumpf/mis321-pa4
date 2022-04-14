@@ -20,12 +20,6 @@ namespace API.Controllers
         [HttpGet]
         public List<Song> Get()
         {
-            IGetSong readObject1 = new ReadSongData();
-            Song songToEdit = readObject1.GetSong(22);
-            songToEdit.SongTitle = "EDITED";
-            IEditSongs editObject = new EditSongData();
-            editObject.Edit(songToEdit);
-
             IGetAllSongs readObject = new ReadSongData();
             return readObject.GetAllSongs();
         }
