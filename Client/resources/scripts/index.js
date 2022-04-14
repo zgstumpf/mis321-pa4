@@ -1,52 +1,14 @@
-// const express = require('express');
-// const app = express();
-// const cors = require('cors');
-// app.use(express.json());
-// app.use(cors())
-// above was recently added
+let main_url = `https://localhost:7039/api/songs/`;
 
 
 
-// TESTING
-
-const allUrl = 'https://fakestoreapi.com/products/'; // link to api
-const oneUrl = 'https://fakestoreapi.com/products/3'
-
-function test()
-{
-    fetch(oneUrl)
-        .then(function(response){
-            console.log(response);
-            return response.json();
-        })
-        .then(function(json){
-            // Do stuff with data from oneUrl
-            let title = json.title;
-            console.log(title);
-            console.log(json);
-            return fetch(allUrl);
-        })
-        .then(function(response){
-            console.log(response);
-            return response.json();
-        })
-        .then(function(json){
-            // Do stuff with data from allUrl
-            console.log(json);
-        })
-        .catch(function(error){
-            console.log(error);
-        })
-}
 
 
 
-// TESTING
 
-
-function GetSongs(){
-    const allSongsApiUrl = "https://localhost:7039/api/songs"
-    fetch(allSongsApiUrl).then(function(response){
+function getSongs(){
+    fetch(main_url).then(function(response){
+        console.log(main_url);
         console.log(response);
         return response.json();
     }).then(function(json) {
@@ -74,10 +36,9 @@ function GetSongs(){
 }
         
 function postSong(){
-    const postSongApiUrl = "https://localhost:7039/api/songs"
     const songTitle = document.getElementById("title").value;
     console.log(songTitle);
-    fetch(postSongApiUrl, {
+    fetch(main_url, {
             method: "POST",
             headers: {
                 Accept: 'application/json',
@@ -91,41 +52,18 @@ function postSong(){
             })
     }).then((response) => {
         console.log(response);
-        GetSongs();
+        getSongs();
     })
 }
 
-// unfinished
-// function putSong(){
-//     const putSongApiUrl = "https://localhost:7039/api/songs"
-//     const songTitle = document.getElementById("title").value;
-//     console.log(songTitle);
-//     fetch(putSongApiUrl, {
-//             method: "PUT",
-//             headers: {
-//                 Accept: 'application/json',
-//                 "Content-Type": 'application/json'
-//             },
-//             body: JSON.stringify( {
-//                 songID: songID,
-//                 songTitle: song.songTitle,
-//                 songTimestamp: new Date().toISOString(),
-//                 deleted: "false",
-//                 favorited: "false"
-//             })
-//     }).then((response) => {
-//         console.log(response);
-//         GetSongs();
-//     })
-// }
 
-
-function DeleteSong(){
+function deleteSong(){
     const deleteID = document.getElementById("IDToDelete").value;
     console.log(deleteID);
-    let deleteSongApiUrl = `https://localhost:7039/api/songs/`
-    deleteSongApiUrl += deleteID
-    fetch(deleteSongApiUrl, {
+    let specific_url = main_url;
+    specific_url += deleteID;
+    console.log(specific_url);
+    fetch(specific_url, {
             method: "DELETE",
             headers: {
                 Accept: 'application/json',
@@ -133,41 +71,18 @@ function DeleteSong(){
             }
     }).then((response) => {
         console.log(response);
-        GetSongs();
+        getSongs();
     })
 }
 
-
-function putSong()
-{
-    const putSongApiUrl = "https://localhost:7039/api/songs/15"
-    fetch(putSongApiUrl, {
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                //'Access-Control-Allow-Origin': '*'
-            },
-            body: JSON.stringify( {
-                songID: 15,
-                songTitle: "Test",
-                songTimestamp: new Date().toISOString(),
-                deleted: "false",
-                favorited: "false"
-            })
-    }).then((response) => {
-        console.log(response);
-        GetSongs();
-    })
-}
 
 function favoriteSong()
 {
     const songID = document.getElementById("IDToFavorite").value;
-    let url = `https://localhost:7039/api/songs/`
-    url += songID;
+    let specific_url = main_url;
+    specific_url += songID;
 
-    fetch(url)
+    fetch(specific_url)
     .then(function(response){
         console.log(response);
         return response.json();
@@ -176,7 +91,7 @@ function favoriteSong()
         let title = json.songTitle;
         let timestamp = json.songTimeStamp;
         let deleted = json.deleted;
-        return fetch(url, {
+        return fetch(specific_url, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -194,55 +109,12 @@ function favoriteSong()
     })
     .then(function(response){
         console.log(response);
-        GetSongs();
+        getSongs();
     })
     .catch(function(error){
         console.log(error);
     })
 }
-
-function ExpiredFavoriteSong(){
-    const songID = document.getElementById("IDToFavorite").value;
-    let url = `https://localhost:7039/api/songs/`
-    url += songID;
-
-    let songTitle;
-    let songTimestamp;
-
-    fetch(url).then(function(response){
-        console.log(response);
-        return response.json();
-    }).then(function(json) 
-        {
-            songTitle = json.songTitle;
-            songTimestamp = json.songTimestamp;
-            console.log(songTitle);  // Correct
-            console.log(songTimestamp); // Correct
-        }).then(
-        )
-    console.log(songTitle); // null
-    console.log(songTimestamp); // null
-
-    fetch(url, {
-            method: "PUT",
-            headers: {
-                Accept: 'application/json',
-                "Content-Type": 'application/json'
-            },
-            body: JSON.stringify( {
-                songID: songID,
-                songTitle: songTitle,
-                songTimestamp: songTimestamp,
-                deleted: "false",
-                favorited: "true"
-            })
-    }).then((response) => {
-        console.log(response);
-        GetSongs();
-    })
-}
-
-
 
 
 function findSongs(){

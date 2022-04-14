@@ -55,12 +55,6 @@ namespace API.Controllers
         // Edit a song in the database.
         // PUT: api/songs/5
         [EnableCors("AnotherPolicy")]
-        // [HttpPut]
-        // public void Put([FromBody] Song song)
-        // {
-        //     IEditSongs editObject = new EditSongData();
-        //     editObject.Edit(song);
-        // }
         [HttpPut("{SongID}")]
         public void Put(int SongID, [FromBody] Song song)
         {
