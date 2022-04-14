@@ -1,3 +1,49 @@
+// const express = require('express');
+// const app = express();
+// const cors = require('cors');
+// app.use(express.json());
+// app.use(cors())
+// above was recently added
+
+
+
+// TESTING
+
+const allUrl = 'https://fakestoreapi.com/products/'; // link to api
+const oneUrl = 'https://fakestoreapi.com/products/3'
+
+function test()
+{
+    fetch(oneUrl)
+        .then(function(response){
+            console.log(response);
+            return response.json();
+        })
+        .then(function(json){
+            // Do stuff with data from oneUrl
+            let title = json.title;
+            console.log(title);
+            console.log(json);
+            return fetch(allUrl);
+        })
+        .then(function(response){
+            console.log(response);
+            return response.json();
+        })
+        .then(function(json){
+            // Do stuff with data from allUrl
+            console.log(json);
+        })
+        .catch(function(error){
+            console.log(error);
+        })
+}
+
+
+
+// TESTING
+
+
 function GetSongs(){
     const allSongsApiUrl = "https://localhost:7039/api/songs"
     fetch(allSongsApiUrl).then(function(response){
@@ -7,7 +53,6 @@ function GetSongs(){
         console.log(json);
         let html = ``;
         json.forEach((song) => {
-            console.log(song.songTitle);
             html += `<div class="card col-md-4 bg-dark text-white">`
             html += `<img src="./resources/images/music.jpeg" class="card-img" alt="...">`
             html += `<div class="card-img-overlay">`
@@ -51,28 +96,28 @@ function postSong(){
 }
 
 // unfinished
-function putSong(){
-    const putSongApiUrl = "https://localhost:7039/api/songs"
-    const songTitle = document.getElementById("title").value;
-    console.log(songTitle);
-    fetch(putSongApiUrl, {
-            method: "PUT",
-            headers: {
-                Accept: 'application/json',
-                "Content-Type": 'application/json'
-            },
-            body: JSON.stringify( {
-                songID: songID,
-                songTitle: song.songTitle,
-                songTimestamp: new Date().toISOString(),
-                deleted: "false",
-                favorited: "false"
-            })
-    }).then((response) => {
-        console.log(response);
-        GetSongs();
-    })
-}
+// function putSong(){
+//     const putSongApiUrl = "https://localhost:7039/api/songs"
+//     const songTitle = document.getElementById("title").value;
+//     console.log(songTitle);
+//     fetch(putSongApiUrl, {
+//             method: "PUT",
+//             headers: {
+//                 Accept: 'application/json',
+//                 "Content-Type": 'application/json'
+//             },
+//             body: JSON.stringify( {
+//                 songID: songID,
+//                 songTitle: song.songTitle,
+//                 songTimestamp: new Date().toISOString(),
+//                 deleted: "false",
+//                 favorited: "false"
+//             })
+//     }).then((response) => {
+//         console.log(response);
+//         GetSongs();
+//     })
+// }
 
 
 function DeleteSong(){
@@ -93,35 +138,90 @@ function DeleteSong(){
 }
 
 
+function putSong()
+{
+    const putSongApiUrl = "https://localhost:7039/api/songs/15"
+    fetch(putSongApiUrl, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                //'Access-Control-Allow-Origin': '*'
+            },
+            body: JSON.stringify( {
+                songID: 15,
+                songTitle: "Test",
+                songTimestamp: new Date().toISOString(),
+                deleted: "false",
+                favorited: "false"
+            })
+    }).then((response) => {
+        console.log(response);
+        GetSongs();
+    })
+}
 
-function FavoriteSong(){
+function favoriteSong()
+{
     const songID = document.getElementById("IDToFavorite").value;
-    console.log(songID);
     let url = `https://localhost:7039/api/songs/`
     url += songID;
-    console.log("Testing Favorite Function");
-    console.log(url);
+
+    fetch(url)
+    .then(function(response){
+        console.log(response);
+        return response.json();
+    })
+    .then(function(json){
+        let title = json.songTitle;
+        let timestamp = json.songTimeStamp;
+        let deleted = json.deleted;
+        return fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            body: JSON.stringify( {
+                songID: songID,
+                songTitle: title,
+                songTimestamp: timestamp,
+                deleted: deleted,
+                favorited: 'true'
+            })
+        });
+    })
+    .then(function(response){
+        console.log(response);
+        GetSongs();
+    })
+    .catch(function(error){
+        console.log(error);
+    })
+}
+
+function ExpiredFavoriteSong(){
+    const songID = document.getElementById("IDToFavorite").value;
+    let url = `https://localhost:7039/api/songs/`
+    url += songID;
 
     let songTitle;
     let songTimestamp;
 
-    // return json object at specific URL
     fetch(url).then(function(response){
         console.log(response);
         return response.json();
-    }).then(function(json) {
-        console.log("AAA");
-        console.log("JSON OBJECT  " + json);
-        console.log("AAA");
-
-        // The correct json object is returned.
-        // Below is the part that doesn't work.
-        let song = json;
-        songTitle = song[songTitle];
-        songTimestamp = song[songTimestamp];})
-
-    console.log("Title" + songTitle);
-    console.log(songTimestamp);
+    }).then(function(json) 
+        {
+            songTitle = json.songTitle;
+            songTimestamp = json.songTimestamp;
+            console.log(songTitle);  // Correct
+            console.log(songTimestamp); // Correct
+        }).then(
+        )
+    console.log(songTitle); // null
+    console.log(songTimestamp); // null
 
     fetch(url, {
             method: "PUT",
@@ -141,6 +241,7 @@ function FavoriteSong(){
         GetSongs();
     })
 }
+
 
 
 

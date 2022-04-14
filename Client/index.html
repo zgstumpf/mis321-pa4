@@ -8,7 +8,9 @@
     <link href="./resources/css/index.css" rel="stylesheet">
     <title>Big Al's BDS Playlist</title>
 </head>
-<body onload="GetSongs()">
+
+<!-- <body onload="GetSongs()"> -->
+<body onload=putSong()>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">Big Al's BDS Playlist</a>
@@ -105,7 +107,7 @@
       <form onsubmit="return false;" method="put">
           <label class="form-label" for="title">Enter a song ID to favorite:</label><br>
           <input class="form-control" type="text" id="IDToFavorite" name="ID"><br>
-          <input type="submit" value="Favorite" onclick="FavoriteSong()">
+          <input type="submit" value="Favorite" onclick="favoriteSong()">
         </form>
     </div>
 

@@ -8,20 +8,23 @@ namespace API.Models
 
         public void Edit(Song song)
         {
+            Console.WriteLine("Updating in database: " + song.ToString());
             ConnectionString myConnection = new ConnectionString();
             string cs = myConnection.cs;
             using var con = new MySqlConnection(cs);
             con.Open();
 
-            string stm = $@"UPDATE songs SET song_title=@title, song_time_stamp=@timestamp, deleted=@deleted, favorited=@favorited WHERE id=@id";
+            string stm = @"UPDATE songs SET song_title=@title, song_time_stamp=@timestamp, deleted=@deleted, favorited=@favorited WHERE id=@id";
             using var cmd = new MySqlCommand(stm, con);
             cmd.Parameters.AddWithValue("@id", song.SongID);
             cmd.Parameters.AddWithValue("@title", song.SongTitle);
             cmd.Parameters.AddWithValue("@timestamp", song.SongTimestamp);
-            cmd.Parameters.AddWithValue("@favorited", song.Favorited);
             cmd.Parameters.AddWithValue("@deleted", song.Deleted);
+            cmd.Parameters.AddWithValue("@favorited", song.Favorited);
             cmd.Prepare();
             cmd.ExecuteNonQuery();
+
+            Console.WriteLine("Database has been updated.");
         }
     }
 }

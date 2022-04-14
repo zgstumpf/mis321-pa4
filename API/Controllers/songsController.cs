@@ -20,6 +20,12 @@ namespace API.Controllers
         [HttpGet]
         public List<Song> Get()
         {
+            IGetSong readObject1 = new ReadSongData();
+            Song songToEdit = readObject1.GetSong(22);
+            songToEdit.SongTitle = "EDITED";
+            IEditSongs editObject = new EditSongData();
+            editObject.Edit(songToEdit);
+
             IGetAllSongs readObject = new ReadSongData();
             return readObject.GetAllSongs();
         }
@@ -49,8 +55,14 @@ namespace API.Controllers
         // Edit a song in the database.
         // PUT: api/songs/5
         [EnableCors("AnotherPolicy")]
-        [HttpPut("{id}")]
-        public void Put([FromBody] Song song)  //used to have [From Body] before Song
+        // [HttpPut]
+        // public void Put([FromBody] Song song)
+        // {
+        //     IEditSongs editObject = new EditSongData();
+        //     editObject.Edit(song);
+        // }
+        [HttpPut("{SongID}")]
+        public void Put(int SongID, [FromBody] Song song)
         {
             IEditSongs editObject = new EditSongData();
             editObject.Edit(song);
